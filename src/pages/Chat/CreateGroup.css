@@ -1,0 +1,182 @@
+
+.modal-header {
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--teams-text-muted);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-body .form-group {
+  margin-bottom: 16px;
+}
+
+.modal-body .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+}
+
+.modal-body .form-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--teams-bg-tertiary);
+  border: 1px solid var(--teams-border);
+  border-radius: 6px;
+  color: var(--teams-text-primary);
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.create-group-form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 12px;
+}
+
+.create-group-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+  margin-bottom: 8px;
+}
+
+.create-group-search {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--teams-border);
+  border-radius: 8px;
+  background: var(--teams-bg-secondary);
+  color: var(--teams-text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.create-group-search:focus {
+  border-color: var(--teams-accent);
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.3);
+}
+
+.create-group-friends-selection {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  max-height: 30vh;
+  overflow-y: auto;
+  width: 100%;
+  padding: 4px;
+}
+
+.create-group-friend-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--teams-bg-tertiary);
+  border: 1px solid var(--teams-border);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+}
+
+.create-group-friend-checkbox:hover {
+  background-color: var(--teams-hover);
+  border-color: var(--teams-accent);
+}
+
+.create-group-friend-checkbox.selected {
+  background-color: var(--teams-accent);
+  border-color: var(--teams-purple);
+}
+
+.create-group-friend-checkbox.selected label {
+  color: white;
+}
+
+.create-group-friend-avatar {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--teams-purple) 0%, var(--teams-accent) 100%);
+  border-radius: 50%;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.create-group-friend-checkbox label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--teams-text-primary);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chat-tabs {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+
+.chat-tab-button {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+  color: #555;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.chat-tab-button:hover {
+  color: #000;
+}
+
+.chat-tab-button.active {
+  border-bottom-color: #007bff;
+  color: #007bff;
+  font-weight: 700;
+}
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90vw;
+    max-width: none;
+  }
+
+  .create-group-friends-selection {
+    max-height: 40vh;
+    grid-template-columns: 1fr; /* Stack friends in a single column on mobile */
+  }
+}

@@ -1,0 +1,1020 @@
+/* ===== AUTH PAGE CSS - INDEPENDENT STYLING ===== */
+
+/* Main Container */
+.authentication-page {
+  /* CSS Variables */
+  --teams-purple: #6264a7;
+  --teams-purple-hover: #5a5c9a;
+  --teams-purple-light: #8b8cc7;
+  --teams-bg-primary: #1e1e1e;
+  --teams-bg-secondary: #2d2d30;
+  --teams-bg-tertiary: #3e3e42;
+  --teams-sidebar: #252526;
+  --teams-text-primary: #ffffff;
+  --teams-text-secondary: #cccccc;
+  --teams-text-muted: #969696;
+  --teams-border: #464647;
+  --teams-hover: #3e3e42;
+  --teams-accent: #0078d4;
+  --teams-success: #92c5f7;
+  --teams-warning: #ffaa44;
+  --teams-error: #f85149;
+  --teams-radius: 8px;
+  --teams-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --teams-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  /* Page Layout */
+  min-height: 100vh;
+  background: var(--teams-bg-primary);
+  color: var(--teams-text-primary);
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+   display: flex;
+  width: 100%;
+  height: 100vh; 
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Pattern */
+.authentication-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+.authentication-bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(98, 100, 167, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 120, 212, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(146, 197, 247, 0.05) 0%, transparent 50%);
+}
+
+/* Left Side Animation Section */
+.authentication-animation-section {
+  background:linear-gradient(120deg, #1b1c36, #20457bff);
+  border-radius: 16px;
+  display: flex;
+   width: 30%;  
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
+  height: 85vh;    /* this will make left full height */
+}
+
+.authentication-animation-content {
+  text-align: center;
+  z-index: 2;
+  max-width: 400px;
+}
+
+.authentication-brand-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--teams-text-primary);
+  margin: 0 0 16px 0;
+  animation: fadeInUp 1s ease-out;
+}
+
+.authentication-brand-subtitle {
+  font-size: 18px;
+  color: var(--teams-text-secondary);
+  margin: 0 0 40px 0;
+  line-height: 1.6;
+  animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.authentication-features {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+.authentication-feature {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.authentication-feature:hover {
+  background: rgba(192, 207, 213, 0.16);
+  transform: translateX(8px);
+}
+
+.authentication-feature-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--teams-accent), var(--teams-purple-light));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.authentication-feature-text {
+  flex: 1;
+}
+
+.authentication-feature-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+  margin: 0 0 4px 0;
+}
+
+.authentication-feature-desc {
+  font-size: 14px;
+  color: var(--teams-text-muted);
+  margin: 0;
+}
+
+/* Animated Background Elements */
+.authentication-bg-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.authentication-bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(0, 120, 212, 0.1));
+  animation: float 8s ease-in-out infinite;
+}
+
+.authentication-bg-circle:nth-child(1) {
+  width: 200px;
+  height: 200px;
+  top: 10%;
+  left: -50px;
+  animation-delay: 0s;
+}
+
+.authentication-bg-circle:nth-child(2) {
+  width: 150px;
+  height: 150px;
+  top: 60%;
+  right: -30px;
+  animation-delay: 2s;
+}
+
+.authentication-bg-circle:nth-child(3) {
+  width: 100px;
+  height: 100px;
+  top: 30%;
+  left: 60%;
+  animation-delay: 4s;
+}
+
+/* Main Animation Container */
+.authentication-main-animation {
+  margin: 0 auto 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+.authentication-main-animation > div {
+  filter: drop-shadow(0 8px 32px rgba(98, 100, 167, 0.3));
+}
+
+/* Right Side Form Section */
+.authentication-form-section-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background: var(--teams-bg-primary);
+  position: relative;
+    width: 60%;
+  height: 100vh;    /* this will make right full height */
+  overflow-y: auto;
+}
+
+/* Auth Container */
+.authentication-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 680px;
+  transition: max-width 0.3s ease;
+}
+
+/* Wider container for registration */
+.authentication-wrapper.register-mode {
+  max-width: 920px;
+}
+
+/* Auth Card */
+.authentication-card {
+  background: var(--teams-bg-secondary);
+  border: 1px solid var(--teams-border);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--teams-shadow);
+  backdrop-filter: blur(100px);
+  position: relative;
+  max-height: 95vh;
+  overflow-y: auto;
+  height: 85vh;
+}
+
+/* Auth Header */
+.authentication-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.authentication-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.authentication-logo-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--teams-purple), var(--teams-accent));
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 6px 20px rgba(23, 23, 27, 0.3);
+}
+
+.authentication-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--teams-text-primary);
+  margin: 0;
+}
+
+.authentication-subtitle {
+  font-size: 14px;
+  color: var(--teams-text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Messages */
+.authentication-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--teams-radius);
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.authentication-message.success {
+  background: rgba(146, 197, 247, 0.1);
+  border: 1px solid rgba(146, 197, 247, 0.2);
+  color: var(--teams-success);
+}
+
+.authentication-message.error {
+  background: rgba(248, 81, 73, 0.1);
+  border: 1px solid rgba(248, 81, 73, 0.2);
+  color: var(--teams-error);
+}
+
+/* Form Styles */
+.authentication-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.authentication-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Enhanced grid for registration form */
+.authentication-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.authentication-form-grid-full {
+  grid-column: 1 / -1;
+}
+
+/* Three column layout for some sections */
+.authentication-form-grid-three {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+.authentication-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.authentication-form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+}
+
+.authentication-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.authentication-form-input {
+  width: 100%;
+  padding: 10px 14px 10px 44px;
+  background: var(--teams-bg-tertiary);
+  border: 1px solid var(--teams-border);
+  border-radius: var(--teams-radius);
+  color: var(--teams-text-primary);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.authentication-form-input:focus {
+  outline: none;
+  border-color: var(--teams-accent);
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+}
+
+.authentication-form-input.error {
+  border-color: var(--teams-error);
+  box-shadow: 0 0 0 2px rgba(248, 81, 73, 0.2);
+}
+
+.authentication-form-input::placeholder {
+  color: var(--teams-text-muted);
+}
+
+/* Textarea Styles */
+.authentication-form-textarea {
+  min-height: 60px;
+  resize: vertical;
+  padding-top: 10px;
+  line-height: 1.4;
+}
+
+/* Select Styles */
+.authentication-form-input[type="select"],
+select.authentication-form-input {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23969696' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  padding-right: 48px;
+  appearance: none;
+}
+
+/* Form Note */
+.authentication-form-note {
+  font-size: 12px;
+  color: var(--teams-text-muted);
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* Form Sections */
+.authentication-form-section {
+  margin: 16px 0 12px 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--teams-border);
+}
+
+.authentication-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.authentication-section-title::before {
+  content: '';
+  width: 3px;
+  height: 14px;
+  background: linear-gradient(135deg, var(--teams-purple), var(--teams-accent));
+  border-radius: 2px;
+}
+
+.authentication-input-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--teams-text-muted);
+  z-index: 1;
+}
+
+.authentication-password-toggle {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--teams-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s ease;
+}
+
+.authentication-password-toggle:hover {
+  color: var(--teams-text-secondary);
+}
+
+.authentication-error-text {
+  font-size: 12px;
+  color: var(--teams-error);
+  margin-top: 4px;
+}
+
+/* Checkbox Styles */
+.authentication-checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.authentication-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.authentication-checkbox-checkmark {
+  width: 20px;
+  height: 20px;
+  background: var(--teams-bg-tertiary);
+  border: 1px solid var(--teams-border);
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.authentication-checkbox-input:checked + .authentication-checkbox-checkmark {
+  background: var(--teams-accent);
+  border-color: var(--teams-accent);
+}
+
+.authentication-checkbox-input:checked + .authentication-checkbox-checkmark::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.authentication-checkbox-input.error + .authentication-checkbox-checkmark {
+  border-color: var(--teams-error);
+}
+
+.authentication-checkbox-label {
+  font-size: 14px;
+  color: var(--teams-text-secondary);
+}
+
+.authentication-link {
+  color: var(--teams-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.authentication-link:hover {
+  text-decoration: underline;
+}
+
+/* Submit Button */
+.authentication-submit-btn {
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, var(--teams-purple), var(--teams-accent));
+  color: white;
+  border: none;
+  border-radius: var(--teams-radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  margin-top: 6px;
+}
+
+.authentication-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(98, 100, 167, 0.4);
+}
+
+.authentication-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.authentication-submit-btn.loading {
+  pointer-events: none;
+}
+
+/* Loading Spinner */
+.authentication-loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: authentication-spin 1s linear infinite;
+}
+
+@keyframes authentication-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Demo Button */
+.authentication-demo-btn {
+  width: 100%;
+  padding: 10px 20px;
+  background: var(--teams-bg-tertiary);
+  color: var(--teams-text-secondary);
+  border: 1px solid var(--teams-border);
+  border-radius: var(--teams-radius);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+.authentication-demo-btn:hover:not(:disabled) {
+  background: var(--teams-hover);
+  border-color: var(--teams-text-muted);
+  color: var(--teams-text-primary);
+}
+
+.authentication-demo-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Auth Mode Switch */
+.authentication-switch {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--teams-border);
+}
+
+.authentication-switch p {
+  font-size: 14px;
+  color: var(--teams-text-secondary);
+  margin: 0;
+}
+
+.authentication-switch-btn {
+  background: none;
+  border: none;
+  color: var(--teams-accent);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 8px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.authentication-switch-btn:hover {
+  color: var(--teams-purple-light);
+  text-decoration: underline;
+}
+
+/* Back Button */
+.authentication-back {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.authentication-back-btn {
+  background: none;
+  border: none;
+  color: var(--teams-text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--teams-radius);
+  transition: all 0.2s ease;
+}
+
+.authentication-back-btn:hover {
+  color: var(--teams-text-secondary);
+  background: var(--teams-hover);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .authentication-animation-section {
+    padding: 40px 30px;
+  }
+
+  .authentication-animation-content {
+    max-width: 350px;
+  }
+
+  .authentication-brand-title {
+    font-size: 28px;
+  }
+
+  .authentication-brand-subtitle {
+    font-size: 16px;
+  }
+
+  .authentication-main-animation {
+    margin-bottom: 24px;
+  }
+
+  .authentication-main-animation > div {
+    width: 180px !important;
+    height: 180px !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .authentication-page {
+    grid-template-columns: 1fr;
+    min-height: 100vh;
+  }
+
+  .authentication-animation-section {
+    display: none;
+  }
+
+  .authentication-animation-content {
+    max-width: 100%;
+  }
+
+  .authentication-brand-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .authentication-brand-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .authentication-main-animation {
+    margin-bottom: 16px;
+  }
+
+  .authentication-main-animation > div {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .authentication-features {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .authentication-feature {
+    flex: 1;
+    min-width: 100px;
+    max-width: 140px;
+    padding: 8px 12px;
+    flex-direction: column;
+    text-align: center;
+    gap: 6px;
+  }
+
+  .authentication-feature:hover {
+    transform: translateY(-2px);
+  }
+
+  .authentication-feature-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .authentication-feature-icon > div {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .authentication-feature-title {
+    font-size: 12px;
+  }
+
+  .authentication-feature-desc {
+    font-size: 10px;
+  }
+
+  .authentication-form-section-container {
+    padding: 20px;
+    min-height: 70vh;
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .authentication-animation-section {
+    padding: 16px;
+    min-height: 20vh;
+    max-height: 25vh;
+  }
+
+  .authentication-brand-title {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+
+  .authentication-brand-subtitle {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .authentication-main-animation {
+    margin-bottom: 12px;
+  }
+
+  .authentication-main-animation > div {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .authentication-features {
+    gap: 6px;
+  }
+
+  .authentication-feature {
+    min-width: 80px;
+    max-width: 120px;
+    padding: 6px 8px;
+  }
+
+  .authentication-feature-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .authentication-feature-icon > div {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .authentication-feature-title {
+    font-size: 11px;
+  }
+
+  .authentication-feature-desc {
+    font-size: 9px;
+  }
+
+  .authentication-form-section-container {
+    padding: 16px;
+    min-height: 75vh;
+    flex: 1;
+  }
+
+  .authentication-wrapper.register-mode {
+    max-width: 100%;
+  }
+
+  .authentication-card {
+    padding: 24px 20px;
+    max-height: none;
+    border-radius: 16px;
+    margin: 0;
+  }
+
+  .authentication-form-row,
+  .authentication-form-grid,
+  .authentication-form-grid-three {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .authentication-title {
+    font-size: 22px;
+  }
+
+  .authentication-subtitle {
+    font-size: 13px;
+  }
+
+  .authentication-form {
+    gap: 16px;
+  }
+
+  .authentication-form-group {
+    gap: 6px;
+  }
+
+  .authentication-form-input {
+    padding: 14px 16px 14px 48px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .authentication-form-button {
+    padding: 16px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 320px) {
+  .authentication-animation-section {
+    padding: 12px;
+    min-height: 15vh;
+    max-height: 20vh;
+  }
+
+  .authentication-brand-title {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .authentication-brand-subtitle {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .authentication-main-animation {
+    margin-bottom: 8px;
+  }
+
+  .authentication-main-animation > div {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .authentication-features {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .authentication-feature {
+    flex-direction: row;
+    text-align: left;
+    min-width: auto;
+    max-width: none;
+    padding: 8px 12px;
+    gap: 12px;
+  }
+
+  .authentication-feature:hover {
+    transform: translateX(4px);
+  }
+
+  .authentication-feature-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .authentication-feature-icon > div {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .authentication-feature-title {
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+
+  .authentication-feature-desc {
+    font-size: 11px;
+  }
+
+  .authentication-form-section-container {
+    padding: 1px;
+    min-height: 80vh;
+    flex: 1;
+  }
+
+  .authentication-card {
+    padding: 20px 16px;
+    border-radius: 12px;
+    height: 100%;
+  }
+
+  .authentication-title {
+    font-size: 20px;
+  }
+
+  .authentication-subtitle {
+    font-size: 12px;
+  }
+
+  .authentication-form {
+    gap: 14px;
+  }
+
+  .authentication-form-input {
+    padding: 12px 14px 12px 44px;
+  }
+
+  .authentication-form-button {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .authentication-input-icon {
+    left: 14px;
+    width: 18px;
+    height: 18px;
+      top: 50%;
+  transform: translateY(-50%);
+  display: block;
+  pointer-events: none;
+  }
+
+  .authentication-toggle-password {
+    right: 14px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .authentication-logo-icon {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Focus styles for accessibility */
+.authentication-submit-btn:focus,
+.authentication-switch-btn:focus,
+.authentication-back-btn:focus,
+.authentication-password-toggle:focus {
+  outline: 2px solid var(--teams-accent);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .authentication-card {
+    border-width: 2px;
+  }
+
+  .authentication-form-input {
+    border-width: 2px;
+  }
+
+  .authentication-checkbox-checkmark {
+    border-width: 2px;
+  }
+}

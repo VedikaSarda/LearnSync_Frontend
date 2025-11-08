@@ -1,0 +1,222 @@
+.study-session-panel {
+  --bg-primary: #2d2d30;
+  --bg-secondary: #3e3e42;
+  --bg-tertiary: #414144;
+  --text-primary: #ffffff;
+  --text-secondary: #bbbbbb;
+  --accent: #8ab4f8;
+  --success: #4ade80;
+  --warning: #facc15;
+  --error: #f87171;
+  --border: #505050;
+  --radius: 10px;
+
+  position: fixed;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  color: var(--text-primary);
+  z-index: 1000;
+  width: 360px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.study-session-panel.minimized {
+  width: 200px;
+  height: 40px;
+  overflow: hidden;
+}
+
+/* HEADER */
+.panel-header {
+  background: #6264a7;
+  color: white;
+  border-radius: var(--radius) var(--radius) 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  user-select: none;
+  cursor: move;
+}
+
+.panel-header button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* BODY */
+.panel-body {
+  padding: 14px;
+  background: var(--bg-primary);
+}
+
+/* TIMER DISPLAY */
+.timer-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 12px;
+}
+
+.timer-display svg {
+  color: var(--accent);
+}
+
+.timer-text {
+  font-weight: bold;
+}
+
+/* BUTTONS */
+.timer-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.timer-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.start-btn {
+  background: var(--success);
+  color: #1e1e1e;
+}
+
+.pause-btn {
+  background: var(--warning);
+  color: #1e1e1e;
+}
+
+.stop-btn {
+  background: var(--error);
+  color: white;
+}
+
+.timer-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* FORM FIELDS */
+.form-group {
+  margin-top: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-size: 13px;
+  transition: border 0.2s ease;
+}
+
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+/* STATUS */
+.session-status {
+  margin-top: 14px;
+  padding: 10px;
+  border-left: 3px solid var(--accent);
+  background: var(--bg-tertiary);
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-dot.active {
+  background: var(--success);
+}
+
+.status-dot.paused {
+  background: var(--warning);
+  animation: none;
+}
+
+.current-material {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* PULSE ANIMATION */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .study-session-panel {
+    width: 95vw;
+    min-width: 280px;
+  }
+
+  .timer-controls {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .timer-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

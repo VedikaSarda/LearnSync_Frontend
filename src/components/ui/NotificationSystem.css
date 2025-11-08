@@ -1,0 +1,199 @@
+/* ===== NOTIFICATION SYSTEM CSS - INDEPENDENT FROM GLOBAL CSS ===== */
+
+/* CSS Variables for NotificationSystem component */
+.notification-container {
+  --teams-purple: #6264a7;
+  --teams-purple-hover: #5a5c9a;
+  --teams-purple-light: #8b8cc7;
+  --teams-bg-primary: #1e1e1e;
+  --teams-bg-secondary: #2d2d30;
+  --teams-bg-tertiary: #3e3e42;
+  --teams-sidebar: #252526;
+  --teams-text-primary: #ffffff;
+  --teams-text-secondary: #cccccc;
+  --teams-text-muted: #969696;
+  --teams-border: #464647;
+  --teams-hover: #3e3e42;
+  --teams-accent: #0078d4;
+  --teams-success: #92c5f7;
+  --teams-warning: #ffaa44;
+  --teams-error: #f85149;
+  --teams-radius: 8px;
+  --teams-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --teams-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  /* Notification Container */
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Notification Item */
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: var(--teams-bg-secondary);
+  border: 1px solid var(--teams-border);
+  border-radius: 12px;
+  box-shadow: var(--teams-shadow-hover);
+  backdrop-filter: blur(10px);
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.notification-item.visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.notification-item.removing {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* Notification Types */
+.notification-item.success {
+  border-left: 4px solid var(--teams-success);
+}
+
+.notification-item.error {
+  border-left: 4px solid var(--teams-error);
+}
+
+.notification-item.warning {
+  border-left: 4px solid var(--teams-warning);
+}
+
+.notification-item.info {
+  border-left: 4px solid var(--teams-accent);
+}
+
+/* Notification Icon */
+.notification-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+.notification-item.success .notification-icon {
+  color: var(--teams-success);
+  background: rgba(146, 197, 247, 0.1);
+}
+
+.notification-item.error .notification-icon {
+  color: var(--teams-error);
+  background: rgba(248, 81, 73, 0.1);
+}
+
+.notification-item.warning .notification-icon {
+  color: var(--teams-warning);
+  background: rgba(255, 170, 68, 0.1);
+}
+
+.notification-item.info .notification-icon {
+  color: var(--teams-accent);
+  background: rgba(0, 120, 212, 0.1);
+}
+
+/* Notification Content */
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.notification-message {
+  font-size: 13px;
+  color: var(--teams-text-secondary);
+  line-height: 1.4;
+}
+
+/* Notification Close Button */
+.notification-close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--teams-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 2px;
+}
+
+.notification-close:hover {
+  background: var(--teams-hover);
+  color: var(--teams-text-primary);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .notification-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+
+  .notification-item {
+    padding: 12px;
+  }
+
+  .notification-title {
+    font-size: 13px;
+  }
+
+  .notification-message {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-container {
+    top: 5px;
+    right: 5px;
+    left: 5px;
+  }
+
+  .notification-item {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .notification-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .notification-close {
+    width: 20px;
+    height: 20px;
+  }
+}

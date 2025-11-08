@@ -1,0 +1,1156 @@
+/* ===== PROGRESS TRACKER CSS - ENHANCED MODERN DESIGN ===== */
+
+/* CSS Variables and Page Layout scoped to ProgressTracker component only */
+.progress-page {
+  /* Enhanced CSS Variables */
+  --teams-purple: #6264a7;
+  --teams-purple-hover: #5a5c9a;
+  --teams-purple-light: #8b8cc7;
+  --teams-purple-dark: #4a4c7a;
+  --teams-bg-primary: #1e1e1e;
+  --teams-bg-secondary: #2d2d30;
+  --teams-bg-tertiary: #3e3e42;
+  --teams-sidebar: #252526;
+  --teams-text-primary: #ffffff;
+  --teams-text-secondary: #cccccc;
+  --teams-text-muted: #969696;
+  --teams-border: #464647;
+  --teams-hover: #3e3e42;
+  --teams-accent: #0078d4;
+  --teams-accent-light: #40a9ff;
+  --teams-success: #52c41a;
+  --teams-success-light: #73d13d;
+  --teams-warning: #faad14;
+  --teams-warning-light: #ffc53d;
+  --teams-error: #ff4d4f;
+  --teams-error-light: #ff7875;
+  --teams-radius: 12px;
+  --teams-radius-sm: 8px;
+  --teams-radius-lg: 16px;
+  --teams-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  --teams-shadow-hover: 0 8px 40px rgba(0, 0, 0, 0.25);
+  --teams-shadow-card: 0 2px 12px rgba(0, 0, 0, 0.1);
+  --teams-gradient-primary: linear-gradient(135deg, var(--teams-purple) 0%, var(--teams-accent) 100%);
+  --teams-gradient-success: linear-gradient(135deg, var(--teams-success) 0%, var(--teams-success-light) 100%);
+  --teams-gradient-progress: linear-gradient(90deg, var(--teams-success) 0%, var(--teams-accent) 100%);
+
+  /* Enhanced Page Layout */
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: var(--teams-bg-primary);
+  color: var(--teams-text-primary);
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  gap: 16px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--teams-text-primary);
+  margin: 0;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: var(--teams-text-secondary);
+  margin: 4px 0 0 0;
+}
+
+.page-header-content {
+  flex: 1;
+}
+
+
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--teams-bg-secondary);
+  border: 1px solid var(--teams-border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--teams-shadow-hover);
+  border-color: var(--teams-purple);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teams-purple) 0%, var(--teams-accent) 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover::before {
+  transform: scaleX(1);
+}
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.stat-icon.purple {
+  background: var(--teams-purple);
+}
+
+.stat-icon.success {
+  background: var(--teams-success);
+}
+
+.stat-icon.warning {
+  background: var(--teams-warning);
+}
+
+.stat-icon.accent {
+  background: var(--teams-accent);
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.1);
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--teams-text-primary);
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--teams-text-muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.stat-change {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--teams-success);
+}
+
+/* Content Grid */
+.content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+/* Card Styles */
+.card {
+  background: var(--teams-bg-secondary);
+  border: 1px solid var(--teams-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--teams-shadow-hover);
+  border-color: var(--teams-purple);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teams-purple) 0%, var(--teams-accent) 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+.card-header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid var(--teams-border);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+  margin: 0 0 8px 0;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: var(--teams-text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.card-content {
+  padding: 24px;
+}
+
+/* Chart Controls */
+.chart-controls {
+  display: flex;
+  gap: 8px;
+  background: var(--teams-bg-tertiary);
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.chart-controls button {
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  color: var(--teams-text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.chart-controls button.active {
+  background: linear-gradient(135deg, #6264a7 0%, #0078d4 100%);
+    border-color: #6264a7;
+    color: white;
+}
+
+.chart-controls button:hover:not(.active) {
+  background: var(--teams-hover);
+  color: var(--teams-text-primary);
+}
+
+/* Form Elements */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-input,
+.form-select {
+  padding: 10px 12px;
+  background: var(--teams-bg-tertiary);
+  border: 1px solid var(--teams-border);
+  border-radius: 6px;
+  color: var(--teams-text-primary);
+  font-size: 14px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--teams-purple);
+  box-shadow: 0 0 0 2px rgba(98, 100, 167, 0.2);
+}
+
+.form-select option {
+  background: var(--teams-bg-tertiary);
+  color: var(--teams-text-primary);
+}
+
+/* Goal Form */
+.goal-form {
+  background: var(--teams-bg-tertiary);
+  border: 1px solid var(--teams-border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.goal-form h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+  margin: 0 0 16px 0;
+}
+
+/* Goals List */
+.goals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.goal-item {
+  background: var(--teams-bg-tertiary);
+  border: 1px solid var(--teams-border);
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.goal-item:hover {
+  background: var(--teams-hover);
+  border-color: var(--teams-purple);
+}
+
+.goal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.goal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+  margin: 0;
+}
+
+.goal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.goal-priority {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.goal-priority.high {
+  background: rgba(248, 81, 73, 0.2);
+  color: var(--teams-error);
+}
+
+.goal-priority.medium {
+  background: rgba(255, 170, 68, 0.2);
+  color: var(--teams-warning);
+}
+
+.goal-priority.low {
+  background: rgba(146, 197, 247, 0.2);
+  color: var(--teams-success);
+}
+
+.goal-action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--teams-bg-secondary);
+  color: var(--teams-text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.goal-action-btn:hover {
+  background: var(--teams-hover);
+  color: var(--teams-text-primary);
+}
+
+/* Target input and increment/decrement buttons styling */
+.goal-target-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.goal-target-input {
+  width: 60px;
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1px solid var(--teams-border);
+  border-radius: 6px;
+  background: var(--teams-bg-secondary);
+  color: var(--teams-text-primary);
+  text-align: center;
+}
+
+.goal-target-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: var(--teams-purple);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.goal-target-btn:hover {
+  background: var(--teams-purple-hover);
+}
+
+.goal-action-btn.danger:hover {
+  background: var(--teams-error);
+  color: white;
+}
+
+.goal-progress {
+  margin-bottom: 12px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progress-info span {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--teams-text-primary);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--teams-bg-primary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teams-purple) 0%, var(--teams-accent) 100%);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.goal-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--teams-text-secondary);
+}
+
+.goal-category {
+  background: rgba(98, 100, 167, 0.2);
+  color: var(--teams-purple-light);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.goal-deadline {
+  font-size: 12px;
+  color: var(--teams-text-muted);
+}
+
+.goal-completed {
+  background: rgba(146, 197, 247, 0.2);
+  color: var(--teams-success);
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 12px;
+}
+
+.empty-goals {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--teams-text-muted);
+}
+
+.empty-goals p {
+  font-size: 16px;
+  color: var(--teams-text-secondary);
+  margin: 0;
+}
+
+/* Subject Progress */
+.subject-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.subject-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--teams-bg-tertiary);
+  border-radius: 8px;
+  border: 1px solid var(--teams-border);
+  transition: all 0.2s ease;
+}
+
+.subject-item:hover {
+  background: var(--teams-hover);
+  border-color: var(--teams-purple);
+}
+
+.subject-info {
+  flex: 1;
+}
+
+.subject-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+  margin: 0 0 4px 0;
+}
+
+.subject-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--teams-text-muted);
+}
+
+.subject-count {
+  color: var(--teams-text-secondary);
+}
+
+.subject-percentage {
+  color: var(--teams-purple);
+  font-weight: 600;
+}
+
+.subject-progress-bar {
+  width: 120px;
+  height: 6px;
+  background: var(--teams-bg-primary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.subject-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teams-purple) 0%, var(--teams-accent) 100%);
+  transition: width 0.3s ease;
+}
+
+.empty-subjects {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--teams-text-muted);
+}
+
+.empty-subjects p {
+  font-size: 16px;
+  color: var(--teams-text-secondary);
+  margin: 0;
+}
+
+/* Achievements */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.achievement-badge {
+  background: var(--teams-bg-tertiary);
+  border: 1px solid var(--teams-border);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.achievement-badge:hover {
+  background: var(--teams-hover);
+  border-color: var(--teams-purple);
+}
+
+.achievement-badge.earned {
+  background: rgba(98, 100, 167, 0.1);
+  border-color: var(--teams-purple);
+}
+
+.achievement-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  color: var(--teams-text-muted);
+}
+
+.achievement-badge.earned .achievement-icon {
+  color: var(--teams-purple);
+}
+
+.achievement-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--teams-text-primary);
+  margin-bottom: 4px;
+}
+
+.achievement-description {
+  font-size: 12px;
+  color: var(--teams-text-muted);
+  line-height: 1.3;
+}
+
+/* Utility Classes for Icons */
+.h-5 {
+  height: 20px;
+}
+
+.w-5 {
+  width: 20px;
+}
+
+.text-blue-500 {
+  color: var(--teams-accent);
+}
+
+.text-green-500 {
+  color: var(--teams-success);
+}
+
+.text-orange-500 {
+  color: var(--teams-warning);
+}
+
+.text-red-500 {
+  color: var(--teams-error);
+}
+
+.text-purple-500 {
+  color: var(--teams-purple);
+}
+
+.text-gray-500 {
+  color: var(--teams-text-muted);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-controls {
+    flex-wrap: wrap;
+  }
+
+  .achievements-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .subject-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .subject-progress-bar {
+    width: 100%;
+  }
+}
+
+/* Buttons */
+.btn,
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+  font-family: inherit;
+  min-height: 28px;
+}
+
+.btn-primary,
+.action-btn.primary {
+  background: var(--teams-purple);
+  color: white;
+  box-shadow: 0 2px 8px rgba(98, 100, 167, 0.3);
+}
+
+.btn-primary:hover,
+.action-btn.primary:hover {
+  background: var(--teams-purple-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(98, 100, 167, 0.4);
+}
+
+.btn-secondary,
+.action-btn.secondary {
+  background: var(--teams-bg-tertiary);
+  color: var(--teams-text-primary);
+  border: 1px solid var(--teams-border);
+}
+
+.btn-secondary:hover,
+.action-btn.secondary:hover {
+  background: var(--teams-hover);
+  border-color: var(--teams-purple);
+}
+
+/* Icons */
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.icon-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-lg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Progress Tracker Styles */
+.period-selector {
+  display: flex;
+  background: var(--teams-bg-secondary);
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.period-btn {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--teams-text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.period-btn:hover {
+  background: var(--teams-bg-tertiary);
+  color: var(--teams-text-primary);
+}
+
+.period-btn.active {
+  background: linear-gradient(135deg, #6264a7 0%, #0078d4 100%);
+    border-color: #6264a7;
+    color: white;
+}
+
+.progress-chart {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  height: 200px;
+  padding: 20px 0;
+}
+
+.chart-bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar-container {
+  height: 150px;
+  width: 32px;
+  background: var(--teams-bg-tertiary);
+  border-radius: 4px;
+  position: relative;
+  display: flex;
+  align-items: end;
+}
+
+.bar-fill {
+  width: 100%;
+  border-radius: 4px;
+  transition: height 0.3s ease;
+  min-height: 4px;
+}
+
+.bar-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.day-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+}
+
+.hours-value {
+  font-size: 10px;
+  color: var(--teams-text-secondary);
+}
+
+/* Goal styles moved to top of file - removing duplicates */
+
+/* goal-progress style moved to top of file */
+
+/* All duplicate styles removed - using styles from top of file */
+
+
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--teams-border);
+  transition: all 0.2s ease;
+}
+
+.achievement-item.earned {
+  background: var(--teams-bg-secondary);
+  border-color: var(--teams-success);
+}
+
+.achievement-item.locked {
+  background: var(--teams-bg-tertiary);
+  opacity: 0.6;
+}
+
+
+
+.achievement-info {
+  flex: 1;
+}
+
+.achievement-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+  margin: 0 0 4px 0;
+}
+
+
+
+.achievement-date {
+  font-size: 10px;
+  color: var(--teams-success);
+  font-weight: 500;
+}
+
+.achievement-progress {
+  font-size: 10px;
+  color: var(--teams-text-secondary);
+}
+
+/* Goal Form Styles */
+
+
+.goal-form h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--teams-text-primary);
+  margin-bottom: 16px;
+}
+
+.goal-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.goal-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.goal-form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.goal-form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--teams-text-primary);
+}
+
+.goal-form-input,
+.goal-form-select,
+.goal-form-textarea {
+  padding: 10px 12px;
+  background: var(--teams-bg-secondary);
+  border: 1px solid var(--teams-border);
+  border-radius: 6px;
+  color: var(--teams-text-primary);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.goal-form-input:focus,
+.goal-form-select:focus,
+.goal-form-textarea:focus {
+  outline: none;
+  border-color: var(--teams-purple);
+  box-shadow: 0 0 0 2px rgba(98, 100, 167, 0.2);
+}
+
+.goal-form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.goal-form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.goal-form-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.goal-form-btn.primary {
+  background: var(--teams-purple);
+  color: white;
+}
+
+.goal-form-btn.primary:hover {
+  background: var(--teams-purple-hover);
+}
+
+.goal-form-btn.secondary {
+  background: var(--teams-bg-secondary);
+  color: var(--teams-text-secondary);
+  border: 1px solid var(--teams-border);
+}
+
+.goal-form-btn.secondary:hover {
+  background: var(--teams-hover);
+  color: var(--teams-text-primary);
+}
+
+/* Chart Controls */
+.chart-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.chart-type-selector {
+  display: flex;
+  background: var(--teams-bg-secondary);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.chart-type-btn {
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  color: var(--teams-text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.chart-type-btn:hover {
+  background: var(--teams-bg-tertiary);
+  color: var(--teams-text-primary);
+}
+
+.chart-type-btn.active {
+  background: var(--teams-purple);
+  color: white;
+}
+
+/* Mobile Progress Tracker */
+@media (max-width: 768px) {
+  .progress-chart {
+    height: 150px;
+    gap: 8px;
+    padding: 16px 0;
+  }
+
+  .bar-container {
+    height: 100px;
+    width: 24px;
+  }
+
+  .day-name {
+    font-size: 10px;
+  }
+
+  .hours-value {
+    font-size: 9px;
+  }
+
+  .goal-form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .goal-form-actions {
+    flex-direction: column;
+  }
+
+  .goal-form-btn {
+    width: 100%;
+  }
+
+  .chart-controls {
+    align-items: stretch;
+    gap: 12px;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .chart-type-selector {
+    justify-content: center;
+  }
+
+  .achievement-item {
+    padding: 8px;
+  }
+
+  .achievement-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+
+  .achievement-title {
+    font-size: 13px;
+  }
+
+  .achievement-description {
+    font-size: 11px;
+  }
+}
+
+.bar-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--teams-bg-primary);
+  border: 1px solid var(--teams-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-width: 120px;
+  box-shadow: var(--teams-shadow);
+  z-index: 10;
+  margin-bottom: 8px;
+  pointer-events: none;
+}
+
+.tooltip-content {
+  font-size: 12px;
+  color: var(--teams-text-secondary);
+}
+
+.tooltip-content strong {
+  display: block;
+  color: var(--teams-text-primary);
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.tooltip-content div {
+  margin: 2px 0;
+}
+
