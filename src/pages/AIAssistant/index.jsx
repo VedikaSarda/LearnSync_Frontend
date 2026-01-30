@@ -93,88 +93,65 @@ const AIAssistant = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const handleSendMessage = async () => {
-    if (newMessage.trim()) {
-      const userMessage = {
-        id: Date.now(),
-        text: newMessage,
-        sender: 'user',
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      }
+ const handleSendMessage = async () => {
+  if (!newMessage.trim()) return;
 
-      setMessages(prev => [...prev, userMessage])
-      const currentMessage = newMessage
-      setNewMessage('')
-      setIsTyping(true)
+  const userMessageObj = {
+    id: Date.now(),
+    text: newMessage,
+    sender: 'user',
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  };
 
-      try {
-        // Check if API key is available
-        if (!import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY === 'your_gemini_api_key_here') {
-          throw new Error('Gemini API key not configured')
-        }
+  setMessages(prev => [...prev, userMessageObj]);
+  const currentMessage = newMessage;
+  setNewMessage('');
+  setIsTyping(true);
 
-        // Build context-aware prompt based on selected subject
-        const subjectContext = selectedSubject !== 'general'
-          ? `You are a helpful AI tutor specializing in ${subjects.find(s => s.id === selectedSubject)?.name}. `
-          : 'You are a helpful AI learning assistant. '
+  try {
 
-        const systemPrompt = subjectContext +
-          'Provide clear, educational responses. Break down complex topics into understandable parts. ' +
-          'Use examples when helpful. Keep responses concise but informative.'
+    const res = await fetch("/api/ai/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({
+        message: currentMessage,
+        subject: selectedSubject,
+        provider: "openai" // or gemini
+      })
+    });
 
-        // Start chat with history
-        const chat = model.startChat({
-          history: chatHistory,
-          generationConfig: {
-            maxOutputTokens: 1000,
-            temperature: 0.7,
-          },
-        })
+    if (!res.ok) throw new Error("AI server error");
 
-        // Send message with context
-        const result = await chat.sendMessage(systemPrompt + '\n\nUser question: ' + currentMessage)
-        const response = await result.response
-        const aiText = response.text()
+    const data = await res.json();
 
-        // Update chat history
-        setChatHistory(prev => [
-          ...prev,
-          { role: 'user', parts: [{ text: currentMessage }] },
-          { role: 'model', parts: [{ text: aiText }] }
-        ])
+    const aiMessage = {
+      id: Date.now() + 1,
+      text: data.reply,
+      sender: 'ai',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      suggestions: generateSuggestions(currentMessage)
+    };
 
-        const aiMessage = {
-          id: Date.now() + 1,
-          text: aiText,
-          sender: 'ai',
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          suggestions: generateSuggestions(currentMessage)
-        }
+    setMessages(prev => [...prev, aiMessage]);
 
-        setMessages(prev => [...prev, aiMessage])
-      } catch (error) {
-        console.error('Gemini API Error:', error)
+  } catch (error) {
 
-        // Fallback error message
-        const errorMessage = {
-          id: Date.now() + 1,
-          text: error.message.includes('API key')
-            ? "⚠️ Gemini API key is not configured. Please add your API key to the .env file as VITE_GEMINI_API_KEY. You can get a free API key from Google AI Studio."
-            : "⚠️ I'm having trouble connecting right now. Please check your internet connection and API key, then try again.",
-          sender: 'ai',
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          suggestions: [
-            { icon: Lightbulb, text: "Try again", action: "retry" },
-            { icon: BookOpen, text: "Learn more", action: "learn" }
-          ]
-        }
+    const errorMessage = {
+      id: Date.now() + 1,
+      text: "⚠️ AI server not reachable. Check backend.",
+      sender: 'ai',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
 
-        setMessages(prev => [...prev, errorMessage])
-      } finally {
-        setIsTyping(false)
-      }
-    }
+    setMessages(prev => [...prev, errorMessage]);
+  } finally {
+    setIsTyping(false);
   }
+};
+
 
   const generateSuggestions = (userMessage) => {
     const message = userMessage.toLowerCase()
