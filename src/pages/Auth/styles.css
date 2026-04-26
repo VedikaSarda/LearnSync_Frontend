@@ -413,6 +413,48 @@ select.authentication-form-input {
 }
 
 /* Form Sections */
+.authentication-role-toggle-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.authentication-role-toggle {
+  display: flex;
+  background: var(--teams-bg-tertiary);
+  border-radius: 8px;
+  padding: 4px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.role-toggle-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--teams-text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.role-toggle-btn:hover {
+  color: var(--teams-text-primary);
+}
+
+.role-toggle-btn.active {
+  background: var(--teams-bg-secondary);
+  color: var(--teams-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
 .authentication-form-section {
   margin: 16px 0 12px 0;
   padding-bottom: 6px;

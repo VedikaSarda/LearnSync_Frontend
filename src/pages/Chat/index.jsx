@@ -1,6 +1,6 @@
 import { Send, Phone, Video, UserPlus, Users, Search, Settings, MoreVertical, X, Plus, Check, CheckCheck } from 'lucide-react'
 import { useState, useEffect, useRef, useLayoutEffect, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { fetchUserProfile, respondToFriendRequestApi, fetchUserById } from '../../utils/profile'
 import {
   initSocket, onMessageReceived, sendMessage, sendTyping, onUserTyping, onUserStatusChange, onMessageRead, sendReadReceipt, onOnlineUsers,
@@ -13,6 +13,7 @@ import { useUserContext } from '../../contexts/UserContext'
 
 const Chat = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const userContext = useUserContext();
   const activeCall = userContext?.activeCall;
   const setActiveCall = userContext?.setActiveCall;
@@ -482,7 +483,43 @@ const Chat = () => {
     loadGroupChatsApi()
   }, [])
 
-  // Remove duplicate declaration of handleUserSelect if exists
+  // Process location state for auto-selecting user and prefilling message
+  useEffect(() => {
+    const processLocationState = async () => {
+      if (location.state && location.state.targetUserId && profile && !loading && friendsList) {
+        const targetId = String(location.state.targetUserId)
+        
+        // Find if user is already in friends list
+        let userToSelect = friendsList.find(f => String(f.id) === targetId)
+        
+        if (!userToSelect) {
+          // If not in friends list, fetch their profile to create a valid selectedUser object
+          const result = await fetchUserById(targetId)
+          if (result.success) {
+            userToSelect = {
+              id: result.user.id || result.user._id,
+              username: result.user.username || `${result.user.first_name} ${result.user.last_name}`,
+              avatar_url: result.user.avatar_url,
+              isGroup: false
+            }
+          }
+        }
+        
+        if (userToSelect && (!selectedUser || String(selectedUser.id) !== targetId)) {
+          handleUserSelect(userToSelect)
+        }
+        
+        if (location.state.prefillMessage) {
+          setNewMessage(location.state.prefillMessage)
+        }
+        
+        // Clear state so it doesn't re-trigger on reload
+        navigate('/chat', { replace: true, state: {} })
+      }
+    }
+    
+    processLocationState()
+  }, [location.state, profile, loading, friendsList])
 
   const loadFriendRequestsApi = async () => {
     try {

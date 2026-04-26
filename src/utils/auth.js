@@ -82,14 +82,14 @@ export const isUserLoggedIn = () => {
 }
 
 // Authentication functions
-export async function loginUser(email, password, remember) {
+export async function loginUser(email, password, role, remember) {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, role })
     });
 
     const data = await response.json();

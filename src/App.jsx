@@ -21,6 +21,15 @@ import LandingPage from './pages/Landing'
 import VideoCall from './pages/VideoCall'
 import { isUserLoggedIn } from './utils/auth'
 
+// Mentor Panel Pages
+import MentorDashboard from './pages/Mentor/Dashboard'
+import ReloadPrompt from './components/ui/ReloadPrompt'
+import MentorStudents from './pages/Mentor/Students'
+import MentorSessions from './pages/Mentor/Sessions'
+import MentorProgress from './pages/Mentor/Progress'
+import MentorAiInsights from './pages/Mentor/AiInsights'
+import MentorProfile from './pages/Mentor/Profile'
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(isUserLoggedIn())
 
@@ -111,7 +120,40 @@ function App() {
             } />
              <Route path="/session/:sessionId" element={<VideoCall />} />
              <Route path="/call/:callId" element={<VideoCall />} />
+
+             {/* Mentor Routes */}
+             <Route path="/mentor/dashboard" element={
+               <Layout key={loggedIn}>
+                 <MentorDashboard />
+               </Layout>
+             } />
+             <Route path="/mentor/students" element={
+               <Layout key={loggedIn}>
+                 <MentorStudents />
+               </Layout>
+             } />
+             <Route path="/mentor/sessions" element={
+               <Layout key={loggedIn}>
+                 <MentorSessions />
+               </Layout>
+             } />
+             <Route path="/mentor/progress" element={
+               <Layout key={loggedIn}>
+                 <MentorProgress />
+               </Layout>
+             } />
+             <Route path="/mentor/ai-insights" element={
+               <Layout key={loggedIn}>
+                 <MentorAiInsights />
+               </Layout>
+             } />
+             <Route path="/mentor/profile" element={
+               <Layout key={loggedIn}>
+                 <MentorProfile />
+               </Layout>
+             } />
             </Routes>
+            <ReloadPrompt />
           </Router>
         </UserProvider>
       </NotificationProvider>

@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { CheckCircle, AlertCircle, Info, X, Bell } from 'lucide-react'
+import { onNotificationReceived } from '../../utils/socket'
 import './NotificationSystem.css'
 
 // Notification Context
@@ -16,8 +17,75 @@ export const useNotifications = () => {
 // Notification Provider
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([])
+  const [appNotifications, setAppNotifications] = useState([])
+  const [appUnreadCount, setAppUnreadCount] = useState(0)
 
-  const addNotification = (notification) => {
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('authToken') || localStorage.getItem('token')
+      if (!token) return
+
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/notifications`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setAppNotifications(data.notifications || [])
+        setAppUnreadCount((data.notifications || []).filter(n => !n.read).length)
+      }
+    } catch (err) {
+      console.error("Error fetching app notifications:", err)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchNotifications()
+
+    onNotificationReceived((notification) => {
+      setAppNotifications(prev => [notification, ...prev])
+      setAppUnreadCount(prev => prev + 1)
+      // Also show a toast for the new persistent notification
+      showInfo(notification.message, notification.title || 'New Notification')
+    })
+  }, [fetchNotifications])
+
+  const markAsRead = async (id) => {
+    try {
+      const token = localStorage.getItem('authToken') || localStorage.getItem('token')
+      if (!token) return
+
+      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/notifications/${id}/read`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setAppNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n))
+      setAppUnreadCount(prev => Math.max(0, prev - 1))
+    } catch (err) {
+      console.error("Error marking as read", err)
+    }
+  }
+
+  const markAllAsRead = async () => {
+    try {
+      const token = localStorage.getItem('authToken') || localStorage.getItem('token')
+      if (!token) return
+
+      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/notifications/read-all`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setAppNotifications(prev => prev.map(n => ({ ...n, read: true })))
+      setAppUnreadCount(0)
+    } catch (err) {
+      console.error("Error marking all as read", err)
+    }
+  }
+
+  const addNotification = (notificationObjOrMessage, typeIfString) => {
+    const options = typeof notificationObjOrMessage === 'string'
+      ? { message: notificationObjOrMessage, type: typeIfString || 'info' }
+      : notificationObjOrMessage;
+
     const id = Date.now()
     const newNotification = {
       id,
@@ -25,7 +93,7 @@ export const NotificationProvider = ({ children }) => {
       title: '',
       message: '',
       duration: 5000, // 5 seconds default
-      ...notification
+      ...options
     }
 
     setNotifications(prev => [...prev, newNotification])
@@ -73,7 +141,12 @@ export const NotificationProvider = ({ children }) => {
     showSuccess,
     showError,
     showWarning,
-    showInfo
+    showInfo,
+    appNotifications,
+    appUnreadCount,
+    markAsRead,
+    markAllAsRead,
+    fetchNotifications
   }
 
   return (

@@ -48,6 +48,7 @@
   gap: 8px;
 }
 
+.ai-assistant-page .model-select,
 .ai-assistant-page .subject-select {
   background: #2d2d30;
   border: 1px solid #464647;
@@ -59,6 +60,7 @@
   transition: all 0.2s ease;
 }
 
+.ai-assistant-page .model-select:focus,
 .ai-assistant-page .subject-select:focus {
   outline: none;
   border-color: #6264a7;
@@ -215,6 +217,38 @@
   font-weight: 600;
 }
 
+/* Speak Button */
+.speak-btn {
+  background: transparent;
+  border: none;
+  color: #969696;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.speak-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.speak-btn.speaking {
+  color: #6264a7;
+  background: rgba(98, 100, 167, 0.2);
+  animation: pulse-soft 2s infinite;
+}
+
+@keyframes pulse-soft {
+  0% { box-shadow: 0 0 0 0 rgba(98, 100, 167, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(98, 100, 167, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(98, 100, 167, 0); }
+}
+
 /* Names and Timestamps */
 .ai-name,
 .user-name {
@@ -349,6 +383,42 @@
 
 .ai-message-input::placeholder {
   color: #969696;
+}
+
+.ai-mic-btn {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 1px solid #464647;
+  border-radius: 50%;
+  color: #cccccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-mic-btn:hover {
+  background: #3e3e42;
+  color: #ffffff;
+  border-color: #6264a7;
+}
+
+.ai-mic-btn.listening {
+  color: #ff4d4d;
+  border-color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.1);
+}
+
+.ai-mic-btn .pulse {
+  animation: pulse-red 1.5s infinite;
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
 }
 
 .ai-send-btn {

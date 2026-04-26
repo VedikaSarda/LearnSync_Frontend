@@ -1,17 +1,14 @@
-import { Bot, Send, Lightbulb, BookOpen, Target, Clock, Brain, Calculator, FileText, Zap, Sparkles } from 'lucide-react'
+import { Bot, Send, Lightbulb, BookOpen, Target, Clock, Brain, Calculator, FileText, Zap, Sparkles, Mic, MicOff, Volume2, VolumeX } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import './styles.css'
+import { InferenceClient } from "@huggingface/inference";
 
 const AIAssistant = () => {
-  // Initialize Gemini AI
-  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '')
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hello! I'm your AI learning assistant powered by Google Gemini. I can help you with study planning, concept explanations, practice problems, and performance analysis. What would you like to learn about today?",
+      text: "Hello! I'm your AI learning assistant powered by Gemma 4. I can help you with study planning, concept explanations, practice problems, and performance analysis. What would you like to learn about today?",
       sender: 'ai',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       suggestions: [
@@ -25,6 +22,8 @@ const AIAssistant = () => {
   const [newMessage, setNewMessage] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [selectedSubject, setSelectedSubject] = useState('general')
+  const [isListening, setIsListening] = useState(false)
+  const [currentlySpeaking, setCurrentlySpeaking] = useState(null)
   const [chatHistory, setChatHistory] = useState([])
   const messagesEndRef = useRef(null)
 
@@ -93,66 +92,269 @@ const AIAssistant = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
- const handleSendMessage = async () => {
-  if (!newMessage.trim()) return;
+  const toggleListening = () => {
+    if (isListening) {
+      setIsListening(false)
+      return
+    }
 
-  const userMessageObj = {
-    id: Date.now(),
-    text: newMessage,
-    sender: 'user',
-    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  };
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      alert("Your browser doesn't support Speech Recognition.")
+      return
+    }
 
-  setMessages(prev => [...prev, userMessageObj]);
-  const currentMessage = newMessage;
-  setNewMessage('');
-  setIsTyping(true);
+    const recognition = new SpeechRecognition()
+    recognition.continuous = false
+    recognition.interimResults = false
+    recognition.lang = 'en-US'
 
-  try {
+    recognition.onstart = () => setIsListening(true)
 
-    const res = await fetch("/api/ai/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      },
-      body: JSON.stringify({
-        message: currentMessage,
-        subject: selectedSubject,
-        provider: "openai" // or gemini
-      })
-    });
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript
+      setNewMessage(prev => prev ? `${prev} ${transcript}` : transcript)
+    }
 
-    if (!res.ok) throw new Error("AI server error");
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error)
+      setIsListening(false)
+    }
 
-    const data = await res.json();
+    recognition.onend = () => setIsListening(false)
 
-    const aiMessage = {
-      id: Date.now() + 1,
-      text: data.reply,
-      sender: 'ai',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      suggestions: generateSuggestions(currentMessage)
-    };
+    recognition.start()
+  }
 
-    setMessages(prev => [...prev, aiMessage]);
+  const handleSpeak = (messageId, text) => {
+    if ('speechSynthesis' in window) {
+      if (currentlySpeaking === messageId) {
+        window.speechSynthesis.cancel()
+        setCurrentlySpeaking(null)
+        return
+      }
 
-  } catch (error) {
+      window.speechSynthesis.cancel()
+      const utterance = new SpeechSynthesisUtterance(text)
+      utterance.lang = 'en-US'
 
-    const errorMessage = {
-      id: Date.now() + 1,
-      text: "⚠️ AI server not reachable. Check backend.",
-      sender: 'ai',
+      utterance.onend = () => setCurrentlySpeaking(null)
+
+      setCurrentlySpeaking(messageId)
+      window.speechSynthesis.speak(utterance)
+    } else {
+      alert("Your browser doesn't support Text-to-Speech.")
+    }
+  }
+
+  // Cleanup speech synthesis on unmount
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel()
+      }
+    }
+  }, [])
+
+  // const handleSendMessage = async () => {
+  //   if (newMessage.trim()) {
+  //     const userMessage = {
+  //       id: Date.now(),
+  //       text: newMessage,
+  //       sender: 'user',
+  //       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  //     }
+
+  //     setMessages(prev => [...prev, userMessage])
+  //     const currentMessage = newMessage
+  //     setNewMessage('')
+  //     setIsTyping(true)
+
+  //     try {
+  //       let aiText = ''
+
+  //       // Build context-aware prompt based on selected subject
+  //       const subjectContext = selectedSubject !== 'general'
+  //         ? `You are a helpful AI tutor specializing in ${subjects.find(s => s.id === selectedSubject)?.name}. `
+  //         : 'You are a helpful AI learning assistant. '
+
+  //       // Hugging Face Logic
+  //       const hfApiKey = import.meta.env.VITE_HF_API_KEY
+  //       if (!hfApiKey || hfApiKey === 'your_hugging_face_token_here') {
+  //         throw new Error('Hugging Face API key not configured')
+  //       }
+
+  //       // Use Hugging Face Messages API for Gemma 4
+  //       const response = await fetch('https://api-inference.huggingface.co/models/google/gemma-4-E4B-it/v1/chat/completions', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Authorization': `Bearer ${hfApiKey}`,
+  //           'Content-Type': 'application/json'
+  //         },
+  //         body: JSON.stringify({
+  //           model: "google/gemma-4-E4B-it",
+  //           messages: [
+  //             { role: "system", content: subjectContext + "Answer this question clearly and concisely." },
+  //             { role: "user", content: currentMessage }
+  //           ],
+  //           max_tokens: 400,
+  //           temperature: 0.7
+  //         })
+  //       })
+
+  //       if (!response.ok) {
+  //          const errorData = await response.json().catch(() => ({}))
+  //          throw new Error(errorData.error || errorData.message || response.statusText || 'Unknown API Error')
+  //       }
+
+  //       const result = await response.json()
+  //       aiText = result.choices?.[0]?.message?.content || "I couldn't generate a response."
+
+  //       // Update chat history
+  //       setChatHistory(prev => [
+  //         ...prev,
+  //         { role: 'user', parts: [{ text: currentMessage }] },
+  //         { role: 'model', parts: [{ text: aiText }] }
+  //       ])
+
+  //       const aiMessage = {
+  //         id: Date.now() + 1,
+  //         text: aiText,
+  //         sender: 'ai',
+  //         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+  //         suggestions: generateSuggestions(currentMessage)
+  //       }
+
+  //       setMessages(prev => [...prev, aiMessage])
+  //     } catch (error) {
+  //       console.error('API Error:', error)
+
+  //       // Fallback error message
+  //       let errorText = `⚠️ I'm having trouble connecting right now. Details: ${error.message}`
+
+  //       if (error.message.includes('API key not configured') || error.message.includes('Failed to fetch')) {
+  //         errorText = `⚠️ API Connection failed. If using Hugging Face, ensure your API key is correct and the model name is valid. Details: ${error.message}`
+  //       } else if (error.message.includes('leaked') || error.message.includes('403')) {
+  //         errorText = `⚠️ Your API key was rejected (403). Please check your key or model access permissions.`
+  //       }
+
+  //       const errorMessage = {
+  //         id: Date.now() + 1,
+  //         text: errorText,
+  //         sender: 'ai',
+  //         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+  //         suggestions: [
+  //           { icon: Lightbulb, text: "Try again", action: "retry" },
+  //           { icon: BookOpen, text: "Learn more", action: "learn" }
+  //         ]
+  //       }
+
+  //       setMessages(prev => [...prev, errorMessage])
+  //     } finally {
+  //       setIsTyping(false)
+  //     }
+  //   }
+  // }
+
+  const handleSendMessage = async () => {
+    if (!newMessage.trim()) return;
+
+    const userMessage = {
+      id: Date.now(),
+      text: newMessage,
+      sender: 'user',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
-    setMessages(prev => [...prev, errorMessage]);
-  } finally {
-    setIsTyping(false);
-  }
-};
+    setMessages(prev => [...prev, userMessage]);
 
+    const currentInput = newMessage;
+    setNewMessage('');
+    setIsTyping(true);
 
+    try {
+      const apiKey = import.meta.env.VITE_HF_API_KEY;
+
+      if (!apiKey) {
+        throw new Error("Missing Hugging Face API Key");
+      }
+
+      const hf = new InferenceClient(apiKey);
+
+      const systemPrompt = {
+        role: "system",
+        content: `You are a helpful AI tutor specializing in ${selectedSubject}. Keep explanations clear, structured, and academic.`
+      };
+
+      // Use CLEAN history
+      const history = chatHistory.map(msg => ({
+        role: msg.role,
+        content: msg.parts[0].text
+      }));
+
+      const limitedHistory = history.slice(-6);
+
+      const response = await hf.chatCompletion({
+        model: "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai",
+        messages: [
+          {
+            role: "system",
+            content: `You are a helpful AI tutor for ${selectedSubject}.`,
+          },
+
+          // ✅ SAFE HISTORY (important fix)
+          ...limitedHistory.filter(
+            msg => msg.content && msg.content.trim() !== ""
+          ),
+
+          {
+            role: "user",
+            content: currentInput,
+          },
+        ],
+        max_tokens: 1000,
+        temperature: 0.7
+      });
+
+      const aiText =
+        response?.choices?.[0]?.message.content ||
+        "⚠️ No response generated.";
+
+      // Update clean history
+      setChatHistory(prev => [
+        ...prev,
+        { role: 'user', parts: [{ text: currentInput }] },
+        { role: 'assistant', parts: [{ text: aiText }] }
+      ]);
+
+      const aiMessage = {
+        id: Date.now() + 1,
+        text: aiText,
+        sender: 'ai',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        suggestions: generateSuggestions(currentInput)
+      };
+
+      setMessages(prev => [...prev, aiMessage]);
+
+    } catch (error) {
+      console.error("API Error:", error);
+
+      const errorMessage = {
+        id: Date.now() + 1,
+        text: `⚠️ Error: ${error.message}`,
+        sender: 'ai',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        suggestions: [
+          { icon: Lightbulb, text: "Retry", action: "retry" }
+        ]
+      };
+
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
   const generateSuggestions = (userMessage) => {
     const message = userMessage.toLowerCase()
 
@@ -210,7 +412,7 @@ const AIAssistant = () => {
           <h1 className="page-title">AI Learning Assistant</h1>
           <p className="page-subtitle">Get personalized help with your studies using advanced AI</p>
         </div>
-        <div className="page-header-actions">
+        <div className="page-header-actions" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <div className="subject-selector">
             <select
               value={selectedSubject}
@@ -264,6 +466,13 @@ const AIAssistant = () => {
                         </div>
                         <span className="ai-name">AI Assistant</span>
                         <span className="ai-timestamp">{message.timestamp}</span>
+                        <button
+                          className={`speak-btn ${currentlySpeaking === message.id ? 'speaking' : ''}`}
+                          onClick={() => handleSpeak(message.id, message.text)}
+                          title={currentlySpeaking === message.id ? "Stop Speaking" : "Read Aloud"}
+                        >
+                          {currentlySpeaking === message.id ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                        </button>
                       </div>
                     )}
                     {message.sender === 'user' && (
@@ -331,6 +540,13 @@ const AIAssistant = () => {
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyDown={handleKeyPress}
               />
+              <button
+                className={`ai-mic-btn ${isListening ? 'listening' : ''}`}
+                onClick={toggleListening}
+                title={isListening ? "Stop listening" : "Start Voice Input"}
+              >
+                {isListening ? <MicOff size={18} className="pulse" /> : <Mic size={18} />}
+              </button>
               <button
                 className="ai-send-btn"
                 onClick={handleSendMessage}

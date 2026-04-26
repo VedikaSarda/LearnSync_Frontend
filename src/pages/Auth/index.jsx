@@ -19,7 +19,8 @@ import {
   Target,
   Users,
   Award,
-  Zap
+  Zap,
+  DollarSign
 } from 'lucide-react'
 import { loginUser, registerUser, validatePassword, validateEmail, getDemoCredentials } from '../../utils/auth'
 import { saveUserProfile } from '../../utils/localStorage'
@@ -42,6 +43,11 @@ const Auth = () => {
     education_level: '',
     phone: '',
     bio: '',
+    role: 'student',
+    expertise: '',
+    experience_years: '',
+    hourly_rate: '',
+    availability: '',
     agreeToTerms: false
   })
   
@@ -64,6 +70,11 @@ const Auth = () => {
       education_level: '',
       phone: '',
       bio: '',
+      role: 'student',
+      expertise: '',
+      experience_years: '',
+      hourly_rate: '',
+      availability: '',
       agreeToTerms: false
     })
     setErrors({})
@@ -128,12 +139,26 @@ const Auth = () => {
         newErrors.last_name = 'Last name can only contain letters and spaces'
       }
 
-      if (!formData.field_of_study) {
-        newErrors.field_of_study = 'Field of study is required'
-      }
-
-      if (!formData.education_level) {
-        newErrors.education_level = 'Education level is required'
+      if (formData.role === 'student') {
+        if (!formData.field_of_study) {
+          newErrors.field_of_study = 'Field of study is required'
+        }
+        if (!formData.education_level) {
+          newErrors.education_level = 'Education level is required'
+        }
+      } else if (formData.role === 'mentor') {
+        if (!formData.expertise) {
+          newErrors.expertise = 'Expertise is required'
+        }
+        if (!formData.experience_years) {
+          newErrors.experience_years = 'Years of experience is required'
+        }
+        if (!formData.hourly_rate) {
+          newErrors.hourly_rate = 'Hourly rate is required'
+        }
+        if (!formData.availability) {
+          newErrors.availability = 'Availability is required'
+        }
       }
 
       // Optional phone validation
@@ -169,14 +194,18 @@ const Auth = () => {
     try {
       if (isLogin) {
         // Handle login
-        const result = await loginUser(formData.email, formData.password, formData.rememberMe || false)
+        const result = await loginUser(formData.email, formData.password, formData.role, formData.rememberMe || false)
 
         if (result.success) {
           saveUserProfile(result.user)
           console.log('Login successful, user:', result.user)
           setSuccessMessage('Login successful! Redirecting...')
           setTimeout(() => {
-            navigate('/dashboard')
+            if (result.user.role === 'mentor' || formData.role === 'mentor') {
+              navigate('/mentor/dashboard')
+            } else {
+              navigate('/dashboard')
+            }
           }, 1000)
         } else {
           setErrors({
@@ -193,7 +222,12 @@ const Auth = () => {
           field_of_study: formData.field_of_study,
           education_level: formData.education_level,
           phone: formData.phone,
-          bio: formData.bio
+          bio: formData.bio,
+          role: formData.role,
+          expertise: formData.expertise,
+          experience_years: formData.experience_years,
+          hourly_rate: formData.hourly_rate,
+          availability: formData.availability
         })
 
         if (result.success) {
@@ -375,9 +409,32 @@ const Auth = () => {
 
           {/* Auth form */}
           <form className="authentication-form" onSubmit={handleSubmit}>
+            {/* Role Toggle for Both Modes */}
+            <div className="authentication-role-toggle-container">
+              <div className="authentication-role-toggle">
+                <button
+                  type="button"
+                  className={`role-toggle-btn ${formData.role === 'student' ? 'active' : ''}`}
+                  onClick={() => setFormData(prev => ({ ...prev, role: 'student', errors: {} }))}
+                >
+                  <GraduationCap size={18} />
+                  Student
+                </button>
+                <button
+                  type="button"
+                  className={`role-toggle-btn ${formData.role === 'mentor' ? 'active' : ''}`}
+                  onClick={() => setFormData(prev => ({ ...prev, role: 'mentor', errors: {} }))}
+                >
+                  <Brain size={18} />
+                  Mentor
+                </button>
+              </div>
+            </div>
+
             {/* Register-only fields */}
             {!isLogin && (
               <>
+
                 {/* Personal Information Section */}
                 <div className="authentication-form-section">
                   <h3 className="authentication-section-title">Personal Information</h3>
@@ -466,69 +523,162 @@ const Auth = () => {
                   </div>
                 </div>
 
-                {/* Academic Information Section */}
+                {/* Conditional Academic / Mentor Information Section */}
                 <div className="authentication-form-section">
-                  <h3 className="authentication-section-title">Academic Information</h3>
+                  <h3 className="authentication-section-title">
+                    {formData.role === 'student' ? 'Academic Information' : 'Mentor Details'}
+                  </h3>
                 </div>
 
-                <div className="authentication-form-grid">
-                  <div className="authentication-form-group">
-                    <label className="authentication-form-label" htmlFor="field_of_study">Field of Study</label>
-                    <div className="authentication-input-wrapper">
-                      <BookOpen className="authentication-input-icon" size={20} />
-                      <select
-                        id="field_of_study"
-                        name="field_of_study"
-                        value={formData.field_of_study}
-                        onChange={handleInputChange}
-                        className={`authentication-form-input ${errors.field_of_study ? 'error' : ''}`}
-                        aria-describedby={errors.field_of_study ? 'field_of_study-error' : undefined}
-                      >
-                        <option value="">Select your field of study</option>
-                        <option value="medicine">Medicine</option>
-                        <option value="nursing">Nursing</option>
-                        <option value="pharmacy">Pharmacy</option>
-                        <option value="dentistry">Dentistry</option>
-                        <option value="engineering">Engineering</option>
-                        <option value="computer-science">Computer Science</option>
-                        <option value="business">Business</option>
-                        <option value="law">Law</option>
-                        <option value="education">Education</option>
-                        <option value="psychology">Psychology</option>
-                        <option value="other">Other</option>
-                      </select>
+                {formData.role === 'student' ? (
+                  <div className="authentication-form-grid">
+                    <div className="authentication-form-group">
+                      <label className="authentication-form-label" htmlFor="field_of_study">Field of Study</label>
+                      <div className="authentication-input-wrapper">
+                        <BookOpen className="authentication-input-icon" size={20} />
+                        <select
+                          id="field_of_study"
+                          name="field_of_study"
+                          value={formData.field_of_study}
+                          onChange={handleInputChange}
+                          className={`authentication-form-input ${errors.field_of_study ? 'error' : ''}`}
+                          aria-describedby={errors.field_of_study ? 'field_of_study-error' : undefined}
+                        >
+                          <option value="">Select your field of study</option>
+                          <option value="medicine">Medicine</option>
+                          <option value="nursing">Nursing</option>
+                          <option value="pharmacy">Pharmacy</option>
+                          <option value="dentistry">Dentistry</option>
+                          <option value="engineering">Engineering</option>
+                          <option value="computer-science">Computer Science</option>
+                          <option value="business">Business</option>
+                          <option value="law">Law</option>
+                          <option value="education">Education</option>
+                          <option value="psychology">Psychology</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+                      {errors.field_of_study && (
+                        <span id="field_of_study-error" className="authentication-error-text">{errors.field_of_study}</span>
+                      )}
                     </div>
-                    {errors.field_of_study && (
-                      <span id="field_of_study-error" className="authentication-error-text">{errors.field_of_study}</span>
-                    )}
-                  </div>
 
-                  <div className="authentication-form-group">
-                    <label className="authentication-form-label" htmlFor="education_level">Education Level</label>
-                    <div className="authentication-input-wrapper">
-                      <GraduationCap className="authentication-input-icon" size={20} />
-                      <select
-                        id="education_level"
-                        name="education_level"
-                        value={formData.education_level}
-                        onChange={handleInputChange}
-                        className={`authentication-form-input ${errors.education_level ? 'error' : ''}`}
-                        aria-describedby={errors.education_level ? 'education_level-error' : undefined}
-                      >
-                        <option value="">Select your education level</option>
-                        <option value="high-school">High School</option>
-                        <option value="undergraduate">Undergraduate</option>
-                        <option value="graduate">Graduate</option>
-                        <option value="postgraduate">Postgraduate</option>
-                        <option value="doctorate">Doctorate</option>
-                        <option value="professional">Professional</option>
-                      </select>
+                    <div className="authentication-form-group">
+                      <label className="authentication-form-label" htmlFor="education_level">Education Level</label>
+                      <div className="authentication-input-wrapper">
+                        <GraduationCap className="authentication-input-icon" size={20} />
+                        <select
+                          id="education_level"
+                          name="education_level"
+                          value={formData.education_level}
+                          onChange={handleInputChange}
+                          className={`authentication-form-input ${errors.education_level ? 'error' : ''}`}
+                          aria-describedby={errors.education_level ? 'education_level-error' : undefined}
+                        >
+                          <option value="">Select your education level</option>
+                          <option value="high-school">High School</option>
+                          <option value="undergraduate">Undergraduate</option>
+                          <option value="graduate">Graduate</option>
+                          <option value="postgraduate">Postgraduate</option>
+                          <option value="doctorate">Doctorate</option>
+                          <option value="professional">Professional</option>
+                        </select>
+                      </div>
+                      {errors.education_level && (
+                        <span id="education_level-error" className="authentication-error-text">{errors.education_level}</span>
+                      )}
                     </div>
-                    {errors.education_level && (
-                      <span id="education_level-error" className="authentication-error-text">{errors.education_level}</span>
-                    )}
                   </div>
-                </div>
+                ) : (
+                  <div className="authentication-form-grid">
+                    <div className="authentication-form-group">
+                      <label className="authentication-form-label" htmlFor="expertise">Area of Expertise</label>
+                      <div className="authentication-input-wrapper">
+                        <Target className="authentication-input-icon" size={20} />
+                        <input
+                          type="text"
+                          id="expertise"
+                          name="expertise"
+                          value={formData.expertise}
+                          onChange={handleInputChange}
+                          className={`authentication-form-input ${errors.expertise ? 'error' : ''}`}
+                          placeholder="e.g. Full-Stack Development"
+                          aria-describedby={errors.expertise ? 'expertise-error' : undefined}
+                        />
+                      </div>
+                      {errors.expertise && (
+                        <span id="expertise-error" className="authentication-error-text">{errors.expertise}</span>
+                      )}
+                    </div>
+
+                    <div className="authentication-form-group">
+                      <label className="authentication-form-label" htmlFor="experience_years">Years of Experience</label>
+                      <div className="authentication-input-wrapper">
+                        <Zap className="authentication-input-icon" size={20} />
+                        <input
+                          type="number"
+                          id="experience_years"
+                          name="experience_years"
+                          min="0"
+                          value={formData.experience_years}
+                          onChange={handleInputChange}
+                          className={`authentication-form-input ${errors.experience_years ? 'error' : ''}`}
+                          placeholder="e.g. 5"
+                          aria-describedby={errors.experience_years ? 'experience_years-error' : undefined}
+                        />
+                      </div>
+                      {errors.experience_years && (
+                        <span id="experience_years-error" className="authentication-error-text">{errors.experience_years}</span>
+                      )}
+                    </div>
+
+                    <div className="authentication-form-group">
+                      <label className="authentication-form-label" htmlFor="hourly_rate">Hourly Rate ($)</label>
+                      <div className="authentication-input-wrapper">
+                        <DollarSign className="authentication-input-icon" size={20} />
+                        <input
+                          type="number"
+                          id="hourly_rate"
+                          name="hourly_rate"
+                          min="0"
+                          step="0.01"
+                          value={formData.hourly_rate}
+                          onChange={handleInputChange}
+                          className={`authentication-form-input ${errors.hourly_rate ? 'error' : ''}`}
+                          placeholder="e.g. 50"
+                          aria-describedby={errors.hourly_rate ? 'hourly_rate-error' : undefined}
+                        />
+                      </div>
+                      {errors.hourly_rate && (
+                        <span id="hourly_rate-error" className="authentication-error-text">{errors.hourly_rate}</span>
+                      )}
+                    </div>
+
+                    <div className="authentication-form-group authentication-form-grid-full">
+                      <label className="authentication-form-label" htmlFor="availability">Availability Schedule</label>
+                      <div className="authentication-input-wrapper">
+                        <BookOpen className="authentication-input-icon" size={20} />
+                        <select
+                          id="availability"
+                          name="availability"
+                          value={formData.availability}
+                          onChange={handleInputChange}
+                          className={`authentication-form-input ${errors.availability ? 'error' : ''}`}
+                          aria-describedby={errors.availability ? 'availability-error' : undefined}
+                        >
+                          <option value="">Select your availability</option>
+                          <option value="weekdays">Weekdays</option>
+                          <option value="weekends">Weekends</option>
+                          <option value="evenings">Evenings</option>
+                          <option value="flexible">Flexible</option>
+                        </select>
+                      </div>
+                      {errors.availability && (
+                        <span id="availability-error" className="authentication-error-text">{errors.availability}</span>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* Bio field - full width */}
                 <div className="authentication-form-group">

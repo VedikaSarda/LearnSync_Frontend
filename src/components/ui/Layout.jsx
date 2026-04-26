@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import UserProfile from './UserProfile'
 import { getUserDisplayInfo } from '../../utils/localStorage'
+import { getCurrentUser } from '../../utils/auth'
+import { useNotifications } from './NotificationSystem'
 import './Layout.css'
 import {
   Home,
@@ -27,11 +29,13 @@ const Layout = ({ children }) => {
   const [showNotifications, setShowNotifications] = useState(false)
   const [showUserProfile, setShowUserProfile] = useState(false)
   const [userDisplayInfo, setUserDisplayInfo] = useState({})
-  const [notifications, setNotifications] = useState([
-    { id: 1, title: 'Assignment Due', message: 'Calculus homework due tomorrow', time: '2 hours ago', unread: true },
-    { id: 2, title: 'New Course Available', message: 'Advanced React Development', time: '1 day ago', unread: true },
-    { id: 3, title: 'Study Reminder', message: 'Time for your daily study session', time: '2 days ago', unread: false }
-  ])
+  
+  const { 
+    appNotifications, 
+    appUnreadCount, 
+    markAsRead, 
+    markAllAsRead 
+  } = useNotifications()
 
   // Load user display info on component mount and listen for updates
   useEffect(() => {
@@ -63,24 +67,10 @@ const Layout = ({ children }) => {
     setShowNotifications(!showNotifications)
   }
 
-  const markNotificationAsRead = (notificationId) => {
-    setNotifications(prev =>
-      prev.map(notif =>
-        notif.id === notificationId
-          ? { ...notif, unread: false }
-          : notif
-      )
-    )
-  }
+  const currentUser = getCurrentUser()
+  const isMentor = currentUser?.role === 'mentor'
 
-  const clearAllNotifications = () => {
-    setNotifications([])
-    setShowNotifications(false)
-  }
-
-  const unreadCount = notifications.filter(n => n.unread).length
-
-  const navigation = [
+  const studentNavigation = [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
     { name: 'My Materials', href: '/my-materials', icon: BookOpen },
     { name: 'Study Planner', href: '/planner', icon: Calendar },
@@ -91,6 +81,18 @@ const Layout = ({ children }) => {
     { name: 'AI Assistant', href: '/ai-assistant', icon: Bot },
     { name: 'Settings', href: '/settings', icon: Settings },
   ]
+
+  const mentorNavigation = [
+    { name: 'Dashboard', href: '/mentor/dashboard', icon: Home },
+    { name: 'My Students', href: '/mentor/students', icon: Users },
+    { name: 'Sessions', href: '/mentor/sessions', icon: Calendar },
+    { name: 'Chat', href: '/chat', icon: MessageCircle },
+    { name: 'Progress Tracking', href: '/mentor/progress', icon: TrendingUp },
+    { name: 'AI Insights', href: '/mentor/ai-insights', icon: Bot },
+    { name: 'Profile Settings', href: '/mentor/profile', icon: Settings },
+  ]
+
+  const navigation = isMentor ? mentorNavigation : studentNavigation
 
   return (
     <div className="layout-container">
@@ -112,7 +114,7 @@ const Layout = ({ children }) => {
             </div>
             <div>
               <div className="logo-text">PLM</div>
-              <div className="logo-subtitle">Learning Hub</div>
+              <div className="logo-subtitle">{isMentor ? 'Mentor Hub' : 'Learning Hub'}</div>
             </div>
           </div>
           <button
@@ -196,8 +198,8 @@ const Layout = ({ children }) => {
                   title="Notifications"
                 >
                   <Bell size={20} />
-                  {unreadCount > 0 && (
-                    <span className="header-notification-badge">{unreadCount}</span>
+                  {appUnreadCount > 0 && (
+                    <span className="header-notification-badge">{appUnreadCount}</span>
                   )}
                 </button>
 
@@ -205,85 +207,41 @@ const Layout = ({ children }) => {
                   <div className="notifications-dropdown">
                     <div className="notifications-header">
                       <h3>Notifications</h3>
-                      {notifications.length > 0 && (
+                      {appNotifications.length > 0 && (
                         <button
                           className="clear-all-btn"
-                          onClick={clearAllNotifications}
+                          onClick={() => {
+                            markAllAsRead();
+                          }}
                         >
-                          Clear All
+                          Mark all as read
                         </button>
                       )}
                     </div>
                     <div className="notifications-list">
-                      {notifications.length === 0 ? (
+                      {appNotifications.length === 0 ? (
                         <div className="no-notifications">
                           <p>No notifications</p>
                         </div>
                       ) : (
-                        notifications.map((notification) => (
+                        appNotifications.map((notification) => (
                           <div
                             key={notification.id}
-                            onClick={() => markNotificationAsRead(notification.id)}
-                            style={{
-                              backgroundColor: notification.unread ? 'rgba(98, 100, 167, 0.1)' : 'transparent',
-                              padding: '16px 20px',
-                              borderBottom: '1px solid var(--teams-border)',
-                              cursor: 'pointer',
-                              transition: 'all 0.2s ease',
-                              display: 'flex',
-                              alignItems: 'flex-start',
-                              gap: '12px',
-                              position: 'relative',
-                              width: '100%',
-                              boxSizing: 'border-box'
-                            }}
-                            onMouseEnter={(e) => {
-                              e.target.style.backgroundColor = 'var(--teams-hover)'
-                            }}
-                            onMouseLeave={(e) => {
-                              e.target.style.backgroundColor = notification.unread ? 'rgba(98, 100, 167, 0.1)' : 'transparent'
+                            className={`notification-item ${!notification.read ? 'unread' : ''}`}
+                            onClick={() => {
+                              if (!notification.read) {
+                                markAsRead(notification.id);
+                              }
                             }}
                           >
-                            <div style={{
-                              flex: 1,
-                              minWidth: 0,
-                              display: 'block'
-                            }}>
-                              <h4 style={{
-                                color: 'var(--teams-text-primary)',
-                                fontSize: '14px',
-                                fontWeight: '600',
-                                margin: '0 0 4px 0',
-                                lineHeight: '1.3'
-                              }}>
-                                {notification.title}
-                              </h4>
-                              <p style={{
-                                color: 'var(--teams-text-secondary)',
-                                fontSize: '13px',
-                                margin: '0 0 4px 0',
-                                lineHeight: '1.4'
-                              }}>
-                                {notification.message}
-                              </p>
-                              <span style={{
-                                color: 'var(--teams-text-muted)',
-                                fontSize: '12px',
-                                lineHeight: '1.2'
-                              }}>
-                                {notification.time}
+                            {!notification.read && <div className="unread-indicator" />}
+                            <div className="notification-content">
+                              <h4>{notification.title || 'Notification'}</h4>
+                              <p>{notification.message}</p>
+                              <span className="notification-time">
+                                {new Date(notification.created_at || new Date()).toLocaleString()}
                               </span>
                             </div>
-                            {notification.unread && (
-                              <div style={{
-                                width: '8px',
-                                height: '8px',
-                                backgroundColor: '#6264a7',
-                                borderRadius: '50%',
-                                flexShrink: 0,
-                                marginTop: '6px'
-                              }}></div>
-                            )}
                           </div>
                         ))
                       )}

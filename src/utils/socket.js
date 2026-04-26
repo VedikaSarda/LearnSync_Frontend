@@ -116,3 +116,8 @@ export const onGroupError = (cb) => {
   if (!socket) return;
   socket.on('group:error', cb);
 };
+
+export const onNotificationReceived = (cb) => {
+  if (!socket) return;
+  socket.on('new_notification', cb);
+};
